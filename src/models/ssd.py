@@ -36,6 +36,35 @@ class SSD(ModelStrategy):
             for images, targets in train_loader:
                 # SSD expects list of tensors for images and list of dicts for targets
                 images = [img.to(device) for img in images]
+
+                # Convert targets from list of list of dicts to list of dicts
+                batch_targets = []
+                for t_list in targets:
+                    if len(t_list) == 0:
+                        boxes = torch.zeros((0, 4), dtype=torch.float32)
+                        labels = torch.zeros(0, dtype=torch.int64)
+                        area = torch.zeros(0, dtype=torch.float32)
+                        iscrowd = torch.zeros(0, dtype=torch.uint8)
+                    else:
+                        boxes = [obj["bbox"] for obj in t_list]
+                        boxes = torch.as_tensor(boxes, dtype=torch.float32).reshape(-1, 4)
+                        boxes[:, 2:] += boxes[:, :2]  # xywh to xyxy
+                        labels = [obj["category_id"] for obj in t_list]
+                        labels = torch.as_tensor(labels, dtype=torch.int64)
+                        area = [obj["area"] for obj in t_list]
+                        area = torch.as_tensor(area, dtype=torch.float32)
+                        iscrowd = [obj["iscrowd"] for obj in t_list]
+                        iscrowd = torch.as_tensor(iscrowd, dtype=torch.uint8)
+                    batch_targets.append(
+                        {
+                            "boxes": boxes,
+                            "labels": labels,
+                            "area": area,
+                            "iscrowd": iscrowd,
+                        }
+                    )
+                targets = batch_targets
+
                 targets = [
                     {k: v.to(device) if isinstance(v, torch.Tensor) else v for k, v in t.items()} for t in targets
                 ]
