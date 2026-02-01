@@ -31,11 +31,17 @@ class MLP(ModelStrategy):
         criterion = nn.CrossEntropyLoss()
         match self.config.optimizer.type:
             case "Adam":
-                optimizer = optim.Adam(model.parameters(), lr=self.config.optimizer.learning_rate)
+                optimizer = optim.Adam(
+                    model.parameters(), lr=self.config.optimizer.learning_rate
+                )
             case "SGD":
-                optimizer = optim.SGD(model.parameters(), lr=self.config.optimizer.learning_rate)
+                optimizer = optim.SGD(
+                    model.parameters(), lr=self.config.optimizer.learning_rate
+                )
             case _:
-                raise ValueError(f"Unsupported optimizer type: {self.config.optimizer.type}")
+                raise ValueError(
+                    f"Unsupported optimizer type: {self.config.optimizer.type}"
+                )
 
         model.train()
         for epoch in range(epochs):
@@ -46,7 +52,9 @@ class MLP(ModelStrategy):
                     batch_count += 1
                     # リストの画像をテンソルに統合できない場合、ここでスキップ
                     # または、画像を個別に処理する
-                    print(f"Epoch {epoch+1}/{epochs}, Batch {batch_count}: Loaded {len(inputs)} images on {device}")
+                    print(
+                        f"Epoch {epoch + 1}/{epochs}, Batch {batch_count}: Loaded {len(inputs)} images on {device}"
+                    )
                     if batch_count >= 3:  # サンプル: 最初の3バッチだけ処理
                         break
                     continue
@@ -62,7 +70,9 @@ class MLP(ModelStrategy):
                 loss.backward()
                 optimizer.step()
 
-            print(f"Epoch {epoch+1}/{epochs} completed - Processed {batch_count} batches")
+            print(
+                f"Epoch {epoch + 1}/{epochs} completed - Processed {batch_count} batches"
+            )
 
     def predict(self, model, input_data, device=None):
         if device is None:

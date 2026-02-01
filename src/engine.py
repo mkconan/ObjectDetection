@@ -2,9 +2,6 @@ from core.experiment_base import ExperimentBase
 from models.ssd import SSD
 
 import torch
-from torch.utils.data import Dataset, DataLoader
-from torchvision import datasets
-from torchvision.transforms import ToTensor
 from torchvision import transforms
 from torchvision.datasets import CocoDetection
 
@@ -61,12 +58,16 @@ def main(config: DictConfig):
 
     # training_data = datasets.FashionMNIST(root="data", train=True, download=True, transform=ToTensor())
     train_loader = torch.utils.data.DataLoader(
-        coco_dataset, batch_size=config.learning.batch_size, collate_fn=collate_fn_custom
+        coco_dataset,
+        batch_size=config.learning.batch_size,
+        collate_fn=collate_fn_custom,
     )
     input_data = None
 
     # Only run experiment if we have actual data
-    first_strategy.run_experiment(config, train_loader, config.learning.epochs, input_data)
+    first_strategy.run_experiment(
+        config, train_loader, config.learning.epochs, input_data
+    )
 
 
 if __name__ == "__main__":

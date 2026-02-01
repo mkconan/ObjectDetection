@@ -28,7 +28,9 @@ class SSD(ModelStrategy):
         model.train()
 
         # Use Adam optimizer as per config
-        optimizer = torch.optim.Adam(model.parameters(), lr=self.config.optimizer.learning_rate)
+        optimizer = torch.optim.Adam(
+            model.parameters(), lr=self.config.optimizer.learning_rate
+        )
 
         for epoch in range(epochs):
             epoch_loss = 0.0
@@ -47,7 +49,9 @@ class SSD(ModelStrategy):
                         iscrowd = torch.zeros(0, dtype=torch.uint8)
                     else:
                         boxes = [obj["bbox"] for obj in t_list]
-                        boxes = torch.as_tensor(boxes, dtype=torch.float32).reshape(-1, 4)
+                        boxes = torch.as_tensor(boxes, dtype=torch.float32).reshape(
+                            -1, 4
+                        )
                         boxes[:, 2:] += boxes[:, :2]  # xywh to xyxy
                         labels = [obj["category_id"] for obj in t_list]
                         labels = torch.as_tensor(labels, dtype=torch.int64)
@@ -66,7 +70,11 @@ class SSD(ModelStrategy):
                 targets = batch_targets
 
                 targets = [
-                    {k: v.to(device) if isinstance(v, torch.Tensor) else v for k, v in t.items()} for t in targets
+                    {
+                        k: v.to(device) if isinstance(v, torch.Tensor) else v
+                        for k, v in t.items()
+                    }
+                    for t in targets
                 ]
 
                 optimizer.zero_grad()
@@ -78,7 +86,9 @@ class SSD(ModelStrategy):
                 epoch_loss += losses.item()
                 batch_count += 1
 
-            print(f"Epoch {epoch+1}/{epochs} completed - Average Loss: {epoch_loss / batch_count:.4f}")
+            print(
+                f"Epoch {epoch + 1}/{epochs} completed - Average Loss: {epoch_loss / batch_count:.4f}"
+            )
 
     def predict(self, model, input_data, device=None):
         if device is None:
