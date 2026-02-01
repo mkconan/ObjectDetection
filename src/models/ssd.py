@@ -13,8 +13,13 @@ class SSD(ModelStrategy):
 
     def build(self, config: DictConfig) -> nn.Module:
         self.config = config
-        # Load pre-trained SSD model with COCO weights
-        model = ssd300_vgg16(weights=SSD300_VGG16_Weights.COCO_V1)
+        # Load pre-trained SSD model with specified weights
+        weights = config.model.weights
+        if weights == "COCO_V1":
+            model = ssd300_vgg16(weights=SSD300_VGG16_Weights.COCO_V1)
+        else:
+            # Assume it's a path or None for custom weights
+            model = ssd300_vgg16(weights=None)
         # Optionally, modify the number of classes if needed
         # For COCO, it's 91 classes (80 object classes + background)
         # If you need fewer classes, you can modify the classifier head

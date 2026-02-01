@@ -1,0 +1,4 @@
+name: ssd
+score_threshold: 0.5
+input_size: [300, 300]
+weights: COCO_V1

@@ -1,5 +1,6 @@
 from core.experiment_base import ExperimentBase
 from models.ssd import SSD
+from models.mlp import MLP
 
 import torch
 from torchvision import transforms
@@ -29,28 +30,51 @@ def collate_fn_custom(batch):
 @hydra.main(config_path="../conf", config_name="config", version_base="1.2")
 def main(config: DictConfig):
     # デバイス設定
-    if torch.backends.mps.is_available():
-        device = torch.device("mps")
-        print("Using MPS (Metal Performance Shaders) device")
-    elif torch.cuda.is_available():
-        device = torch.device("cuda")
-        print("Using CUDA device")
-    else:
+    device_config = config.device
+    if device_config == "auto":
+        if torch.backends.mps.is_available():
+            device = torch.device("mps")
+            print("Using MPS (Metal Performance Shaders) device")
+        elif torch.cuda.is_available():
+            device = torch.device("cuda")
+            print("Using CUDA device")
+        else:
+            device = torch.device("cpu")
+            print("Using CPU device")
+    elif device_config == "cpu":
         device = torch.device("cpu")
         print("Using CPU device")
+    elif device_config == "cuda":
+        device = torch.device("cuda")
+        print("Using CUDA device")
+    elif device_config == "mps":
+        device = torch.device("mps")
+        print("Using MPS (Metal Performance Shaders) device")
+    else:
+        raise ValueError(f"Unsupported device: {device_config}")
 
-    first_strategy = ExperimentBase(strategy=SSD(), device=device)
-    print(config)
+    # モデル選択
+    model_name = config.model.name
+    if model_name == "ssd":
+        strategy = SSD()
+        input_size = config.model.input_size
+    elif model_name == "mlp":
+        strategy = MLP()
+        input_size = (300, 300)  # Default for MLP
+    else:
+        raise ValueError(f"Unknown model: {model_name}")
+
+    first_strategy = ExperimentBase(strategy=strategy, device=device)
 
     # プロジェクトのルートディレクトリを取得
     project_root = Path(__file__).parent.parent
 
     coco_dataset = CocoDetection(
-        root=str(project_root / "data/coco/images/train2017"),
-        annFile=str(project_root / "data/coco/annotations/instances_train2017.json"),
+        root=str(project_root / config.data.root),
+        annFile=str(project_root / config.data.ann_file),
         transform=transforms.Compose(
             [
-                transforms.Resize((300, 300)),
+                transforms.Resize(tuple(input_size)),
                 transforms.ToTensor(),
             ]
         ),

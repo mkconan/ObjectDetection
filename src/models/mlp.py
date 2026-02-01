@@ -14,12 +14,12 @@ class MLP(ModelStrategy):
     def build(self, config: DictConfig) -> nn.Module:
         layers = []
         self.config = config
-        input_size = config.learning.batch_size  # Example input size
-        for hidden_size in [64, 32, 16]:
+        input_size = 300 * 300 * 3  # Example for resized images
+        for hidden_size in config.model.layers:
             layers.append(nn.Linear(input_size, hidden_size))
             layers.append(nn.ReLU())
             input_size = hidden_size
-        layers.append(nn.Linear(input_size, 3))
+        layers.append(nn.Linear(input_size, 91))  # COCO classes + background
 
         model = nn.Sequential(*layers)
         return model

@@ -1,8 +1,19 @@
+defaults:
+  - _self_
+  - model: ssd
+
+data:
+  root: "data/coco/images/train2017"
+  ann_file: "data/coco/annotations/instances_train2017.json"
+  val_root: "data/coco/images/val2017"
+  val_ann_file: "data/coco/annotations/instances_val2017.json"
+
 learning:
   batch_size: 32
   epochs: 50
+
 optimizer:
   type: Adam
   learning_rate: 0.001
-model:
-  score_threshold: 0.5
+
+device: auto
