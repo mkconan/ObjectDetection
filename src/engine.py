@@ -1,5 +1,5 @@
 from core.experiment_base import ExperimentBase
-from models.mlp import MLP
+from models.ssd import SSD
 
 import torch
 from torch.utils.data import Dataset, DataLoader
@@ -42,7 +42,7 @@ def main(config: DictConfig):
         device = torch.device("cpu")
         print("Using CPU device")
 
-    first_strategy = ExperimentBase(strategy=MLP(), device=device)
+    first_strategy = ExperimentBase(strategy=SSD(), device=device)
     print(config)
 
     # プロジェクトのルートディレクトリを取得
@@ -51,7 +51,12 @@ def main(config: DictConfig):
     coco_dataset = CocoDetection(
         root=str(project_root / "data/coco/images/train2017"),
         annFile=str(project_root / "data/coco/annotations/instances_train2017.json"),
-        transform=transforms.ToTensor(),
+        transform=transforms.Compose(
+            [
+                transforms.Resize((300, 300)),
+                transforms.ToTensor(),
+            ]
+        ),
     )
 
     # training_data = datasets.FashionMNIST(root="data", train=True, download=True, transform=ToTensor())
