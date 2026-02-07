@@ -1,41 +1,66 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
-import torch.nn as nn
-from torch.utils.data import DataLoader
-
+from pytorch_lightning import LightningModule
 from omegaconf import DictConfig
 
 
-class ModelStrategy(ABC):
-    @abstractmethod
-    def build(self, config: DictConfig) -> nn.Module:
-        """Build the model architecture.
+class ModelStrategy(LightningModule):
+    """Abstract base class for models using PyTorch Lightning.
+
+    Subclasses should implement training_step(), validation_step(),
+    configure_optimizers(), and forward() methods.
+    """
+
+    def __init__(self, config: DictConfig = None):
+        """Initialize the model strategy.
 
         Args:
-            config (DictConfig): _description_
+            config (DictConfig, optional): Configuration dictionary
+        """
+        super().__init__()
+        self.config = config
+        self.save_hyperparameters()
+
+    @abstractmethod
+    def forward(self, x):
+        """Forward pass of the model.
+
+        Args:
+            x: Input data
 
         Returns:
-            nn.Module: _description_
+            Model output
         """
         pass
 
     @abstractmethod
-    def train(self, model: nn.Module, train_loader: DataLoader, epochs: int):
-        """Train the model using the provided training data.
+    def training_step(self, batch, batch_idx):
+        """Training step for PyTorch Lightning.
 
         Args:
-            model (nn.Module): _description_
-            train_loader (DataLoader): _description_
-            epochs (int): _description_
+            batch: Training batch
+            batch_idx: Batch index
+
+        Returns:
+            Loss value
         """
         pass
 
     @abstractmethod
-    def predict(self, model: nn.Module, input_data):
-        """Make predictions based on the input data.
+    def validation_step(self, batch, batch_idx):
+        """Validation step for PyTorch Lightning.
 
         Args:
-            model (nn.Module): _description_
-            input_data (_type_): _description_
+            batch: Validation batch
+            batch_idx: Batch index
+        """
+        pass
+
+    @abstractmethod
+    def configure_optimizers(self):
+        """Configure optimizers for training.
+
+        Returns:
+            Optimizer or list of optimizers
         """
         pass

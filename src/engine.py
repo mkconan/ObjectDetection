@@ -1,30 +1,13 @@
-from core.experiment_base import ExperimentBase
+from core.data_module import CocoDetectionDataModule
 from models.ssd import SSD
-from models.mlp import MLP
 
 import torch
-from torchvision import transforms
-from torchvision.datasets import CocoDetection
-
 import hydra
 from omegaconf import DictConfig
 from pathlib import Path
-
-
-def collate_fn_custom(batch):
-    """カスタム collate_fn: サイズ不均一な画像に対応"""
-    images = []
-    targets = []
-    for item in batch:
-        images.append(item[0])  # 画像
-        targets.append(item[1])  # アノテーション
-
-    # 最初のバッチの画像サイズを基準にリサイズ（簡易的な対応）
-    if images:
-        ref_size = images[0].shape
-        print(f"Batch images info - Count: {len(images)}, Sample shape: {ref_size}")
-
-    return images, targets
+from pytorch_lightning import Trainer
+from pytorch_lightning.callbacks import ModelCheckpoint
+from pytorch_lightning.loggers import TensorBoardLogger, CSVLogger
 
 
 @hydra.main(config_path="../conf", config_name="config", version_base="1.2")
@@ -33,22 +16,22 @@ def main(config: DictConfig):
     device_config = config.device
     if device_config == "auto":
         if torch.backends.mps.is_available():
-            device = torch.device("mps")
+            device = "mps"
             print("Using MPS (Metal Performance Shaders) device")
         elif torch.cuda.is_available():
-            device = torch.device("cuda")
+            device = "cuda"
             print("Using CUDA device")
         else:
-            device = torch.device("cpu")
+            device = "cpu"
             print("Using CPU device")
     elif device_config == "cpu":
-        device = torch.device("cpu")
+        device = "cpu"
         print("Using CPU device")
     elif device_config == "cuda":
-        device = torch.device("cuda")
+        device = "cuda"
         print("Using CUDA device")
     elif device_config == "mps":
-        device = torch.device("mps")
+        device = "mps"
         print("Using MPS (Metal Performance Shaders) device")
     else:
         raise ValueError(f"Unsupported device: {device_config}")
@@ -56,42 +39,63 @@ def main(config: DictConfig):
     # モデル選択
     model_name = config.model.name
     if model_name == "ssd":
-        strategy = SSD()
-        input_size = config.model.input_size
-    elif model_name == "mlp":
-        strategy = MLP()
-        input_size = (300, 300)  # Default for MLP
+        model = SSD(config=config)
     else:
         raise ValueError(f"Unknown model: {model_name}")
-
-    first_strategy = ExperimentBase(strategy=strategy, device=device)
 
     # プロジェクトのルートディレクトリを取得
     project_root = Path(__file__).parent.parent
 
-    coco_dataset = CocoDetection(
-        root=str(project_root / config.data.root),
-        annFile=str(project_root / config.data.ann_file),
-        transform=transforms.Compose(
-            [
-                transforms.Resize(tuple(input_size)),
-                transforms.ToTensor(),
-            ]
-        ),
+    # データモジュルの作成
+    data_module = CocoDetectionDataModule(config, project_root)
+    data_module.setup()
+
+    # チェックポイント保存の設定
+    checkpoint_callback = ModelCheckpoint(
+        dirpath=str(project_root / "outputs"),
+        filename="ssd-{epoch:02d}-{val_loss:.2f}",
+        monitor="val_loss",
+        mode="min",
+        save_top_k=3,
+        verbose=True,
     )
 
-    # training_data = datasets.FashionMNIST(root="data", train=True, download=True, transform=ToTensor())
-    train_loader = torch.utils.data.DataLoader(
-        coco_dataset,
-        batch_size=config.learning.batch_size,
-        collate_fn=collate_fn_custom,
-    )
-    input_data = None
+    # ロガーの設定（TensorBoard優先、失敗時はCSV）
+    try:
+        logger = TensorBoardLogger(
+            save_dir=str(project_root / "lightning_logs"),
+            name="ssd_detection",
+        )
+        print("✓ TensorBoard logger enabled")
+    except Exception as e:
+        print(f"⚠ TensorBoard logger failed ({e}), using CSV logger")
+        logger = CSVLogger(
+            save_dir=str(project_root / "lightning_logs"),
+            name="ssd_detection",
+        )
 
-    # Only run experiment if we have actual data
-    first_strategy.run_experiment(
-        config, train_loader, config.learning.epochs, input_data
+    # Trainer の設定
+    trainer = Trainer(
+        max_epochs=config.learning.epochs,
+        accelerator=device,
+        callbacks=[checkpoint_callback],
+        logger=logger,
+        enable_progress_bar=True,
+        log_every_n_steps=10,
     )
+
+    # モデルの学習
+    print(f"\n{'=' * 60}")
+    print(f"Training SSD for {config.learning.epochs} epochs")
+    print(f"Device: {device}")
+    print(f"Batch size: {config.learning.batch_size}")
+    print(f"{'=' * 60}\n")
+
+    trainer.fit(model, data_module)
+
+    print("\n✓ Training completed!")
+    print(f"Logs saved to: {project_root / 'lightning_logs'}")
+    print(f"Checkpoints saved to: {project_root / 'outputs'}")
 
 
 if __name__ == "__main__":
