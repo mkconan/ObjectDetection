@@ -1,0 +1,55 @@
+{
+  "info": {
+    "description": "Tiny COCO for tests"
+  },
+  "licenses": [],
+  "images": [
+    {
+      "id": 101,
+      "file_name": "000000000101.jpg",
+      "width": 320,
+      "height": 240
+    },
+    {
+      "id": 102,
+      "file_name": "000000000102.jpg",
+      "width": 320,
+      "height": 240
+    }
+  ],
+  "annotations": [
+    {
+      "id": 10100,
+      "image_id": 101,
+      "category_id": 1,
+      "bbox": [
+        75,
+        46,
+        68,
+        80
+      ],
+      "area": 5440.0,
+      "iscrowd": 0
+    },
+    {
+      "id": 10101,
+      "image_id": 102,
+      "category_id": 1,
+      "bbox": [
+        31,
+        55,
+        114,
+        57
+      ],
+      "area": 6498.0,
+      "iscrowd": 0
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "box",
+      "supercategory": "shape"
+    }
+  ]
+}
