@@ -7,7 +7,7 @@ from omegaconf import DictConfig
 from pathlib import Path
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
-from pytorch_lightning.loggers import TensorBoardLogger, CSVLogger
+from pytorch_lightning.loggers import TensorBoardLogger, CSVLogger, MLFlowLogger
 
 
 @hydra.main(config_path="../conf", config_name="config", version_base="1.2")
@@ -60,26 +60,47 @@ def main(config: DictConfig):
         verbose=True,
     )
 
-    # ロガーの設定（TensorBoard優先、失敗時はCSV）
+    # ロガーの設定（MLflow、TensorBoard、CSV）
+    loggers = []
+    
+    # MLflow logger
     try:
-        logger = TensorBoardLogger(
+        mlflow_logger = MLFlowLogger(
+            experiment_name=config.mlflow.experiment_name,
+            tracking_uri=config.mlflow.tracking_uri,
+            run_name=config.mlflow.run_name,
+        )
+        loggers.append(mlflow_logger)
+        print(f"✓ MLflow logger enabled (tracking URI: {config.mlflow.tracking_uri})")
+    except Exception as e:
+        print(f"⚠ MLflow logger failed ({e})")
+    
+    # TensorBoard logger
+    try:
+        tb_logger = TensorBoardLogger(
             save_dir=str(project_root / "lightning_logs"),
             name="ssd_detection",
         )
+        loggers.append(tb_logger)
         print("✓ TensorBoard logger enabled")
     except Exception as e:
-        print(f"⚠ TensorBoard logger failed ({e}), using CSV logger")
-        logger = CSVLogger(
+        print(f"⚠ TensorBoard logger failed ({e})")
+    
+    # CSV logger as fallback
+    if not loggers:
+        csv_logger = CSVLogger(
             save_dir=str(project_root / "lightning_logs"),
             name="ssd_detection",
         )
+        loggers.append(csv_logger)
+        print("✓ CSV logger enabled (fallback)")
 
     # Trainer の設定
     trainer = Trainer(
         max_epochs=config.learning.epochs,
         accelerator=device,
         callbacks=[checkpoint_callback],
-        logger=logger,
+        logger=loggers if len(loggers) > 1 else loggers[0] if loggers else None,
         enable_progress_bar=True,
         log_every_n_steps=10,
     )
