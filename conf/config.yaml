@@ -20,5 +20,5 @@ device: auto
 
 mlflow:
   experiment_name: "ssd_detection"
-  tracking_uri: "http://localhost:5000"
+  tracking_uri: null  # If null, uses ./mlruns directory. Set to "http://localhost:5000" to use tracking server
   run_name: null  # If null, auto-generated
