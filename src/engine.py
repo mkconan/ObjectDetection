@@ -65,7 +65,7 @@ def main(config: DictConfig):
     
     # MLflow logger
     try:
-        tracking_uri = config.mlflow.tracking_uri if config.mlflow.tracking_uri else None
+        tracking_uri = config.mlflow.tracking_uri
         mlflow_logger = MLFlowLogger(
             experiment_name=config.mlflow.experiment_name,
             tracking_uri=tracking_uri,
@@ -98,11 +98,19 @@ def main(config: DictConfig):
         print("✓ CSV logger enabled (fallback)")
 
     # Trainer の設定
+    # Use multiple loggers if more than one, single logger otherwise
+    if len(loggers) > 1:
+        logger = loggers
+    elif len(loggers) == 1:
+        logger = loggers[0]
+    else:
+        logger = None
+    
     trainer = Trainer(
         max_epochs=config.learning.epochs,
         accelerator=device,
         callbacks=[checkpoint_callback],
-        logger=loggers if len(loggers) > 1 else loggers[0] if loggers else None,
+        logger=logger,
         enable_progress_bar=True,
         log_every_n_steps=10,
     )
