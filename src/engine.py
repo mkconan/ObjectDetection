@@ -1,5 +1,6 @@
 from core.data_module import CocoDetectionDataModule
 from models.ssd import SSD
+from models.dino_v3 import DINOv3
 
 import torch
 import hydra
@@ -40,6 +41,8 @@ def main(config: DictConfig):
     model_name = config.model.name
     if model_name == "ssd":
         model = SSD(config=config)
+    elif model_name == "dino_v3":
+        model = DINOv3(config=config)
     else:
         raise ValueError(f"Unknown model: {model_name}")
 
@@ -53,7 +56,7 @@ def main(config: DictConfig):
     # チェックポイント保存の設定
     checkpoint_callback = ModelCheckpoint(
         dirpath=str(project_root / "outputs"),
-        filename="ssd-{epoch:02d}-{val_loss:.2f}",
+        filename=f"{model_name}" + "-{epoch:02d}-{val_loss:.2f}",
         monitor="val_loss",
         mode="min",
         save_top_k=3,
@@ -83,7 +86,7 @@ def main(config: DictConfig):
     try:
         tb_logger = TensorBoardLogger(
             save_dir=str(project_root / "lightning_logs"),
-            name="ssd_detection",
+            name=f"{model_name}_detection",
         )
         loggers.append(tb_logger)
         print("✓ TensorBoard logger enabled")
@@ -94,7 +97,7 @@ def main(config: DictConfig):
     if not loggers:
         csv_logger = CSVLogger(
             save_dir=str(project_root / "lightning_logs"),
-            name="ssd_detection",
+            name=f"{model_name}_detection",
         )
         loggers.append(csv_logger)
         print("✓ CSV logger enabled (fallback: no other loggers succeeded)")
@@ -119,7 +122,7 @@ def main(config: DictConfig):
 
     # モデルの学習
     print(f"\n{'=' * 60}")
-    print(f"Training SSD for {config.learning.epochs} epochs")
+    print(f"Training {model_name} for {config.learning.epochs} epochs")
     print(f"Device: {device}")
     print(f"Batch size: {config.learning.batch_size}")
     print(f"{'=' * 60}\n")

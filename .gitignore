@@ -12,6 +12,7 @@ wheels/
 outputs/
 
 data/coco
+data/coco_tiny
 
 lightning_logs/
 
