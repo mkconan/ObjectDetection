@@ -28,13 +28,15 @@ class DINOv3Backbone(nn.Module):
         if pretrained:
             from torchvision.models import ViT_B_16_Weights
 
-            vit = vit_b_16(
-                weights=ViT_B_16_Weights.IMAGENET1K_V1, image_size=image_size
-            )
+            # Use the default image size associated with the pretrained weights.
+            # Runtime positional-embedding interpolation in `forward` will handle
+            # other input resolutions safely.
+            vit = vit_b_16(weights=ViT_B_16_Weights.IMAGENET1K_V1)
         else:
             vit = vit_b_16(weights=None, image_size=image_size)
         self.conv_proj = vit.conv_proj
         self.encoder = vit.encoder
+        self.class_token = vit.class_token
         self.hidden_dim = hidden_dim
         self.image_size = image_size
         self.patch_size = patch_size
@@ -67,8 +69,8 @@ class DINOv3Backbone(nn.Module):
                 1, h * w, self.hidden_dim
             )
 
-        # Prepend class token placeholder
-        cls_token = x.new_zeros(n, 1, self.hidden_dim)
+        # Prepend learned class token
+        cls_token = self.class_token.expand(n, -1, -1)
         x = torch.cat([cls_token, x], dim=1)
 
         # Add positional embeddings and run through encoder
