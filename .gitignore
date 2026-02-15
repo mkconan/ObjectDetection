@@ -14,3 +14,7 @@ outputs/
 data/coco
 
 lightning_logs/
+
+# MLflow
+mlruns/
+mlartifacts/

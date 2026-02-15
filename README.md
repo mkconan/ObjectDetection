@@ -12,7 +12,7 @@
 - **Hydra** による柔軟な設定管理
 - **COCO データセット** 対応
 - 複数の検出モデルをサポート（現在は SSD を実装）
-- TensorBoard / CSV ロギング対応
+- **MLflow** / TensorBoard / CSV ロギング対応
 
 ## セットアップ
 
@@ -82,6 +82,10 @@ uv run python try.py
 - `learning`: バッチサイズ、エポック数などのトレーニングパラメータ
 - `optimizer`: オプティマイザーの種類と学習率
 - `device`: 使用するデバイス（auto / cpu / cuda / mps）
+- `mlflow`: MLflow トラッキング設定
+  - `experiment_name`: 実験名
+  - `tracking_uri`: トラッキングサーバーの URI（null の場合は ./mlruns ディレクトリを使用。サーバーを使う場合は "http://localhost:5000" など）
+  - `run_name`: 実行名（null の場合は自動生成）
 
 ### モデル設定 (`conf/model/ssd.yaml`)
 
@@ -96,6 +100,26 @@ uv run python try.py
 
 - **チェックポイント**: `outputs/` ディレクトリ
 - **ログ**: `lightning_logs/` ディレクトリ
+- **MLflow トラッキング**: `mlruns/` ディレクトリ（MLflow 使用時）
+
+### MLflow でログを確認
+
+MLflow は自動的にトレーニングメトリクスとパラメータを記録します。MLflow UI でログを確認するには:
+
+```bash
+# MLflow UI を起動（localhost:5000）
+uv run mlflow ui --port 5000
+```
+
+ブラウザで `http://localhost:5000` にアクセスしてください。
+
+MLflow UI では以下の情報が確認できます:
+- トレーニング/検証ロス (train_loss, val_loss)
+- ハイパーパラメータ（学習率、バッチサイズなど）
+- 実験の比較と可視化
+- モデルのバージョン管理
+
+**オプション**: MLflow トラッキングサーバーを使う場合は、`conf/config.yaml` で `mlflow.tracking_uri` を設定してください。
 
 ### TensorBoard でログを確認
 
