@@ -23,9 +23,16 @@ class DINOv3Backbone(nn.Module):
     varying input resolutions.
     """
 
-    def __init__(self, image_size=224, hidden_dim=768, patch_size=16):
+    def __init__(self, image_size=224, hidden_dim=768, patch_size=16, pretrained=False):
         super().__init__()
-        vit = vit_b_16(weights=None, image_size=image_size)
+        if pretrained:
+            from torchvision.models import ViT_B_16_Weights
+
+            vit = vit_b_16(
+                weights=ViT_B_16_Weights.IMAGENET1K_V1, image_size=image_size
+            )
+        else:
+            vit = vit_b_16(weights=None, image_size=image_size)
         self.conv_proj = vit.conv_proj
         self.encoder = vit.encoder
         self.hidden_dim = hidden_dim
@@ -98,12 +105,14 @@ class DINOv3(ModelStrategy):
         if config is not None:
             image_size = config.model.get("image_size", 224)
             num_classes = config.model.get("num_classes", 91)
+            pretrained = config.model.get("pretrained", False)
         else:
             image_size = 224
             num_classes = 91
+            pretrained = False
 
         # Build DINOv3 backbone
-        backbone = DINOv3Backbone(image_size=image_size)
+        backbone = DINOv3Backbone(image_size=image_size, pretrained=pretrained)
 
         # Anchor generator for single feature map
         anchor_generator = AnchorGenerator(

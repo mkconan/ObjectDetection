@@ -56,7 +56,7 @@ def main(config: DictConfig):
     # チェックポイント保存の設定
     checkpoint_callback = ModelCheckpoint(
         dirpath=str(project_root / "outputs"),
-        filename=f"{model_name}" + "-{epoch:02d}-{val_loss:.2f}",
+        filename=f"{model_name}-{{epoch:02d}}-{{val_loss:.2f}}",
         monitor="val_loss",
         mode="min",
         save_top_k=3,
