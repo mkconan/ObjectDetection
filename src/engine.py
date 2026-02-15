@@ -88,14 +88,14 @@ def main(config: DictConfig):
     except Exception as e:
         print(f"⚠ TensorBoard logger failed ({e})")
     
-    # CSV logger as fallback
+    # CSV logger as fallback when no other loggers are available
     if not loggers:
         csv_logger = CSVLogger(
             save_dir=str(project_root / "lightning_logs"),
             name="ssd_detection",
         )
         loggers.append(csv_logger)
-        print("✓ CSV logger enabled (fallback)")
+        print("✓ CSV logger enabled (fallback: no other loggers succeeded)")
 
     # Trainer の設定
     # Use multiple loggers if more than one, single logger otherwise
