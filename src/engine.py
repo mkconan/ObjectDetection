@@ -65,14 +65,13 @@ def main(config: DictConfig):
     
     # MLflow logger
     try:
-        tracking_uri = config.mlflow.tracking_uri
         mlflow_logger = MLFlowLogger(
             experiment_name=config.mlflow.experiment_name,
-            tracking_uri=tracking_uri,
+            tracking_uri=config.mlflow.tracking_uri,
             run_name=config.mlflow.run_name,
         )
         loggers.append(mlflow_logger)
-        tracking_info = tracking_uri if tracking_uri else "mlruns/"
+        tracking_info = config.mlflow.tracking_uri if config.mlflow.tracking_uri else "mlruns/"
         print(f"✓ MLflow logger enabled (tracking: {tracking_info})")
     except Exception as e:
         print(f"⚠ MLflow logger failed ({e})")
