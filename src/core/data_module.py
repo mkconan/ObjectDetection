@@ -70,8 +70,9 @@ class CocoDetectionDataModule(LightningDataModule):
             self.train_dataset,
             batch_size=self.config.learning.batch_size,
             collate_fn=collate_fn_custom,
-            num_workers=0,  # macOS には worker がない
+            # num_workers=4,  # macOS には worker がない
             shuffle=True,
+            # multiprocessing_context="fork",
         )
 
     def val_dataloader(self):
@@ -80,6 +81,7 @@ class CocoDetectionDataModule(LightningDataModule):
             self.val_dataset,
             batch_size=self.config.learning.batch_size,
             collate_fn=collate_fn_custom,
-            num_workers=0,
+            # num_workers=4,  # macOS には worker がない
             shuffle=False,
+            # multiprocessing_context="fork",
         )
