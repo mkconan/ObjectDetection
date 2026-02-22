@@ -1,0 +1,54 @@
+site_name: Object Detection Docs
+site_description: PyTorch Lightning + Hydra による2D物体検出リポジトリのドキュメント
+site_url: https://matsuura.github.io/ObjectDetection/
+docs_dir: docs
+repo_url: https://github.com/matsuura/ObjectDetection
+repo_name: matsuura/ObjectDetection
+
+theme:
+  name: material
+  language: ja
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: ダークモードに切り替え
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: ライトモードに切り替え
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - ホーム: index.md
+  - セットアップ: getting-started.md
+  - 学習実行: training.md
+  - 設定リファレンス: config.md
+  - モデル: models.md
+  - スクリプト: scripts.md
+  - ログと実験管理: logging.md
+  - Lightning 移行履歴: migration.md
