@@ -137,6 +137,10 @@ class DINOv3(ModelStrategy):
             max_size=image_size,
         )
 
+        # Freeze backbone parameters so only the detection head is trained
+        for param in self.model.backbone.parameters():
+            param.requires_grad = False
+
     def forward(self, images, targets=None):
         """Forward pass of DINOv3 detector.
 
@@ -236,21 +240,26 @@ class DINOv3(ModelStrategy):
     def configure_optimizers(self):
         """Configure optimizer based on config.
 
+        Only trainable parameters (detection head) are passed to the optimizer
+        since backbone parameters are frozen.
+
         Returns:
             Optimizer instance
         """
+        trainable_params = filter(lambda p: p.requires_grad, self.parameters())
+
         if self.config is None:
-            return torch.optim.Adam(self.parameters(), lr=0.001)
+            return torch.optim.Adam(trainable_params, lr=0.001)
 
         optimizer_type = self.config.optimizer.type
         learning_rate = self.config.optimizer.learning_rate
 
         if optimizer_type == "Adam":
-            return torch.optim.Adam(self.parameters(), lr=learning_rate)
+            return torch.optim.Adam(trainable_params, lr=learning_rate)
         elif optimizer_type == "SGD":
-            return torch.optim.SGD(self.parameters(), lr=learning_rate, momentum=0.9)
+            return torch.optim.SGD(trainable_params, lr=learning_rate, momentum=0.9)
         else:
-            return torch.optim.Adam(self.parameters(), lr=learning_rate)
+            return torch.optim.Adam(trainable_params, lr=learning_rate)
 
     def _convert_targets(self, targets):
         """Convert targets from COCO format to detection format.
