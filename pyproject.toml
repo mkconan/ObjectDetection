@@ -14,14 +14,12 @@ dependencies = [
     "tensorboard>=2.20.0",
     "torch>=2.10.0",
     "torchvision>=0.25.0",
+    "zensical>=0.0.23",
 ]
 
+[project.scripts]
+zensical = "zensical.__main__:main"
+
 [dependency-groups]
-dev = [
-    "pre-commit>=4.5.1",
-    "ruff>=0.14.14",
-]
-docs = [
-    "mkdocs>=1.6.1",
-    "mkdocs-material>=9.7.2",
-]
+dev = ["pre-commit>=4.5.1", "ruff>=0.14.14"]
+docs = ["zensical>=0.0.1"]
