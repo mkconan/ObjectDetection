@@ -1,0 +1,24 @@
+defaults:
+  - _self_
+  - model: dino_v3
+
+data:
+  root: "data/coco_tiny/images/train2017"
+  ann_file: "data/coco_tiny/annotations/instances_train2017.json"
+  val_root: "data/coco_tiny/images/val2017"
+  val_ann_file: "data/coco_tiny/annotations/instances_val2017.json"
+
+learning:
+  batch_size: 16
+  epochs: 2
+
+optimizer:
+  type: Adam
+  learning_rate: 0.001
+
+device: auto
+
+mlflow:
+  experiment_name: "dino_v3_detection"
+  tracking_uri: null  # If null, uses ./mlruns directory. To use tracking server, set to "http://localhost:5000" (requires running 'mlflow ui --port 5000' first)
+  run_name: null  # If null, auto-generated
