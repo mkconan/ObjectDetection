@@ -1,6 +1,6 @@
 defaults:
   - _self_
-  - model: dino_v3
+  - model: vit_faster_rcnn
 
 data:
   root: "data/coco_tiny/images/train2017"
@@ -19,6 +19,6 @@ optimizer:
 device: auto
 
 mlflow:
-  experiment_name: "dino_v3_detection"
+  experiment_name: "vit_faster_rcnn_detection"
   tracking_uri: null  # If null, uses ./mlruns directory. To use tracking server, set to "http://localhost:5000" (requires running 'mlflow ui --port 5000' first)
   run_name: null  # If null, auto-generated

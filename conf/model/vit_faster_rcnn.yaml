@@ -1,4 +1,4 @@
-name: dino_v3
+name: vit_faster_rcnn
 image_size: 224
 num_classes: 91
 pretrained: false
