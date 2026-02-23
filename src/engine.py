@@ -1,4 +1,5 @@
 from core.data_module import CocoDetectionDataModule
+from models.detr import DETR
 from models.ssd import SSD
 from models.dino_v3 import DINOv3
 
@@ -43,6 +44,8 @@ def main(config: DictConfig):
         model = SSD(config=config)
     elif model_name == "dino_v3":
         model = DINOv3(config=config)
+    elif model_name == "detr":
+        model = DETR(config=config)
     else:
         raise ValueError(f"Unknown model: {model_name}")
 
