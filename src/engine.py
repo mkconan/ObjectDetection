@@ -1,7 +1,7 @@
 from core.data_module import CocoDetectionDataModule
 from models.detr import DETR
 from models.ssd import SSD
-from models.dino_v3 import DINOv3
+from models.vit_faster_rcnn import ViTFasterRCNN
 
 import torch
 import hydra
@@ -42,8 +42,8 @@ def main(config: DictConfig):
     model_name = config.model.name
     if model_name == "ssd":
         model = SSD(config=config)
-    elif model_name == "dino_v3":
-        model = DINOv3(config=config)
+    elif model_name == "vit_faster_rcnn":
+        model = ViTFasterRCNN(config=config)
     elif model_name == "detr":
         model = DETR(config=config)
     else:
@@ -68,7 +68,7 @@ def main(config: DictConfig):
 
     # ロガーの設定（MLflow、TensorBoard、CSV）
     loggers = []
-    
+
     # MLflow logger
     if "mlflow" in config:
         try:
@@ -78,13 +78,15 @@ def main(config: DictConfig):
                 run_name=config.mlflow.run_name,
             )
             loggers.append(mlflow_logger)
-            tracking_info = config.mlflow.tracking_uri if config.mlflow.tracking_uri else "mlruns/"
+            tracking_info = (
+                config.mlflow.tracking_uri if config.mlflow.tracking_uri else "mlruns/"
+            )
             print(f"✓ MLflow logger enabled (tracking: {tracking_info})")
         except Exception as e:
             print(f"⚠ MLflow logger failed ({e})")
     else:
         print("ℹ MLflow configuration not found, skipping MLflow logger")
-    
+
     # TensorBoard logger
     try:
         tb_logger = TensorBoardLogger(
@@ -95,7 +97,7 @@ def main(config: DictConfig):
         print("✓ TensorBoard logger enabled")
     except Exception as e:
         print(f"⚠ TensorBoard logger failed ({e})")
-    
+
     # CSV logger as fallback when no other loggers are available
     if not loggers:
         csv_logger = CSVLogger(
@@ -113,7 +115,7 @@ def main(config: DictConfig):
         logger = loggers[0]
     else:
         logger = None
-    
+
     trainer = Trainer(
         max_epochs=config.learning.epochs,
         accelerator=device,

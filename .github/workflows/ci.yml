@@ -77,10 +77,10 @@ jobs:
             learning.epochs=1 \
             device=cpu
 
-      - name: Train one epoch dino_v3 (tiny)
+      - name: Train one epoch vit_faster_rcnn (tiny)
         run: |
           uv run python src/engine.py \
-            model=dino_v3 \
+            model=vit_faster_rcnn \
             data.root=data/coco_tiny/images/train2017 \
             data.ann_file=data/coco_tiny/annotations/instances_train2017.json \
             data.val_root=data/coco_tiny/images/val2017 \

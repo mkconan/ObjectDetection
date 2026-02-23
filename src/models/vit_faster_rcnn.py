@@ -14,8 +14,8 @@ from models.model_base import ModelStrategy
 from omegaconf import DictConfig
 
 
-class DINOv3Backbone(nn.Module):
-    """Vision Transformer backbone inspired by DINOv3.
+class ViTBackbone(nn.Module):
+    """Vision Transformer (ViT-B/16) backbone for object detection.
 
     Extracts spatial feature maps from a ViT encoder for use
     with standard object detection heads (e.g., Faster R-CNN).
@@ -92,11 +92,11 @@ class DINOv3Backbone(nn.Module):
         return OrderedDict({"0": x})
 
 
-class DINOv3(ModelStrategy):
+class ViTFasterRCNN(ModelStrategy):
     def __init__(self, config: DictConfig = None):
-        """Initialize DINOv3-based object detector.
+        """Initialize ViT + Faster R-CNN object detector.
 
-        Uses a Vision Transformer (DINOv3) backbone with a Faster R-CNN
+        Uses a Vision Transformer (ViT-B/16) backbone with a Faster R-CNN
         detection head.
 
         Args:
@@ -113,8 +113,8 @@ class DINOv3(ModelStrategy):
             num_classes = 91
             pretrained = False
 
-        # Build DINOv3 backbone
-        backbone = DINOv3Backbone(image_size=image_size, pretrained=pretrained)
+        # Build ViT backbone
+        backbone = ViTBackbone(image_size=image_size, pretrained=pretrained)
 
         # Anchor generator for single feature map
         anchor_generator = AnchorGenerator(
@@ -127,7 +127,7 @@ class DINOv3(ModelStrategy):
             featmap_names=["0"], output_size=7, sampling_ratio=2
         )
 
-        # Build Faster R-CNN with DINOv3 backbone
+        # Build Faster R-CNN with ViT backbone
         self.model = FasterRCNN(
             backbone,
             num_classes=num_classes,
@@ -142,7 +142,7 @@ class DINOv3(ModelStrategy):
             param.requires_grad = False
 
     def forward(self, images, targets=None):
-        """Forward pass of DINOv3 detector.
+        """Forward pass of ViT Faster R-CNN detector.
 
         Args:
             images: List of image tensors
