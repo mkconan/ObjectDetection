@@ -6,9 +6,10 @@
 
 ```
 src/models/
-├── model_base.py   # 抽象基底クラス ModelStrategy
-├── ssd.py          # SSD 実装
-└── dino_v3.py      # DINOv3 実装
+├── model_base.py        # 抽象基底クラス ModelStrategy
+├── ssd.py               # SSD 実装
+├── vit_faster_rcnn.py   # ViT + Faster R-CNN 実装
+└── detr.py              # DETR 実装
 ```
 
 `engine.py` はモデル名（`config.model.name`）に応じてクラスをインスタンス化し、PyTorch Lightning の `Trainer.fit()` に渡します。
@@ -55,15 +56,17 @@ uv run src/engine.py model=ssd
 - `training_step()` で損失を計算し `self.log("train_loss", ...)` でログ
 - `validation_step()` で `val_loss` をログ
 
-## DINOv3
+## ViT + Faster R-CNN
 
-`src/models/dino_v3.py` / 設定: `conf/model/dino_v3.yaml`
+`src/models/vit_faster_rcnn.py` / 設定: `conf/model/vit_faster_rcnn.yaml`
 
 ### 概要
 
-- DINOv3 ベースの検出モデル
+- バックボーン: Vision Transformer（ViT-B/16）
+- 検出ヘッド: Faster R-CNN
 - 入力サイズ: 224×224（正方形）
 - COCO の 91 クラスに対応
+- バックボーンパラメータは凍結し、検出ヘッドのみ学習
 
 ### 設定パラメータ
 
@@ -76,22 +79,48 @@ uv run src/engine.py model=ssd
 ### 学習コマンド
 
 ```bash
-uv run src/engine.py model=dino_v3
+uv run src/engine.py model=vit_faster_rcnn
 ```
 
-## DETR（設定のみ・未実装）
+## DETR
 
-`conf/model/detr.yaml` に設定ファイルのみ存在します。モデル実装は今後の追加予定です。
+`src/models/detr.py` / 設定: `conf/model/detr.yaml`
+
+### 概要
+
+DETR（DEtection TRansformer）は Carion et al. (2020) が提案したエンドツーエンド物体検出モデルです。  
+アンカーや NMS を使わず、Transformer のエンコーダ‐デコーダと Hungarian マッチング損失だけで検出を行います。
+
+- バックボーン: ResNet-50（avgpool / fc を除去、1×1 Conv で `hidden_dim` チャンネルに射影）
+- 位置エンコーディング: 2D サイン / コサイン（論文準拠）
+- Transformer: 標準の `nn.Transformer`（エンコーダ + デコーダ）
+- オブジェクトクエリ: 学習可能な埋め込み（デフォルト 100 個）
+- 予測ヘッド: クラスロジットヘッド + 3 層 MLP バウンディングボックスヘッド
+- 損失: Hungarian マッチングによる二部グラフマッチング（分類 + L1 + GIoU）
+
+### 設定パラメータ
 
 | パラメータ | デフォルト | 説明 |
 |---|---|---|
-| `num_queries` | 100 | クエリ数 |
-| `num_encoder_layers` | 6 | エンコーダ層数 |
-| `num_decoder_layers` | 6 | デコーダ層数 |
-| `hidden_dim` | 256 | 隠れ層次元数 |
+| `num_queries` | 100 | オブジェクトクエリ数 |
+| `num_encoder_layers` | 6 | Transformer エンコーダ層数 |
+| `num_decoder_layers` | 6 | Transformer デコーダ層数 |
+| `hidden_dim` | 256 | Transformer 隠れ層次元数 |
+| `nheads` | 8 | マルチヘッドアテンションのヘッド数 |
+| `num_classes` | 91 | クラス数（COCO は 91） |
+| `pretrained` | false | ResNet-50 バックボーンに事前学習済み重みを使用するか |
 
-!!! warning
-    `model=detr` を指定するとエラーになります。
+### 学習コマンド
+
+```bash
+uv run src/engine.py model=detr
+```
+
+複数パラメータの上書き例:
+
+```bash
+uv run src/engine.py model=detr learning.epochs=50 optimizer.learning_rate=0.0001 device=cuda
+```
 
 ## 新しいモデルを追加する
 

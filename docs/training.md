@@ -19,8 +19,11 @@ Hydra の CLI 上書きでモデルを選択できます。
 # SSD（デフォルト）
 uv run src/engine.py model=ssd
 
-# DINOv3
-uv run src/engine.py model=dino_v3
+# ViT + Faster R-CNN
+uv run src/engine.py model=vit_faster_rcnn
+
+# DETR
+uv run src/engine.py model=detr
 ```
 
 ## 主なパラメータ上書き
@@ -42,7 +45,7 @@ uv run src/engine.py device=mps
 複数の上書きは同時に指定できます。
 
 ```bash
-uv run src/engine.py model=dino_v3 device=cuda learning.epochs=30 learning.batch_size=8
+uv run src/engine.py model=vit_faster_rcnn device=cuda learning.epochs=30 learning.batch_size=8
 ```
 
 ## Tiny COCO で最小実行
@@ -60,7 +63,7 @@ uv run src/engine.py --config-name config_tiny
 uv run src/engine.py --config-name config_tiny model=ssd device=mps
 ```
 
-`config_tiny.yaml` はデフォルトで `dino_v3` / `batch_size=16` / `epochs=2` の設定です。
+`config_tiny.yaml` はデフォルトで `vit_faster_rcnn` / `batch_size=16` / `epochs=2` の設定です。
 
 ## 出力ファイル
 

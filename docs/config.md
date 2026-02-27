@@ -9,9 +9,9 @@ conf/
 ├── config.yaml         # フル COCO 用メイン設定
 ├── config_tiny.yaml    # Tiny COCO 用最小設定
 └── model/
-    ├── ssd.yaml        # SSD モデル設定
-    ├── dino_v3.yaml    # DINOv3 モデル設定
-    └── detr.yaml       # DETR モデル設定（未実装）
+    ├── ssd.yaml             # SSD モデル設定
+    ├── vit_faster_rcnn.yaml # ViT + Faster R-CNN モデル設定
+    └── detr.yaml            # DETR モデル設定
 ```
 
 ## `conf/config.yaml`
@@ -67,7 +67,7 @@ Tiny COCO 向けの最小設定です。エポック数 2、バッチサイズ 1
 ```yaml
 defaults:
   - _self_
-  - model: dino_v3
+  - model: vit_faster_rcnn
 
 data:
   root: "data/coco_tiny/images/train2017"
@@ -108,10 +108,10 @@ weights: COCO_V1
 | `input_size` | list[int] | 入力画像サイズ `[H, W]` |
 | `weights` | str | 事前学習済みウェイト（`COCO_V1` など） |
 
-## `conf/model/dino_v3.yaml`
+## `conf/model/vit_faster_rcnn.yaml`
 
 ```yaml
-name: dino_v3
+name: vit_faster_rcnn
 image_size: 224
 num_classes: 91
 pretrained: false
@@ -132,10 +132,21 @@ num_queries: 100
 num_encoder_layers: 6
 num_decoder_layers: 6
 hidden_dim: 256
+nheads: 8
+num_classes: 91
+pretrained: false
 ```
 
-!!! warning "未実装"
-    DETR のモデル実装は現在存在しません。設定ファイルのみで、`model=detr` を指定するとエラーになります。
+| キー | 型 | 説明 |
+|---|---|---|
+| `name` | str | モデル識別子 |
+| `num_queries` | int | オブジェクトクエリ数 |
+| `num_encoder_layers` | int | Transformer エンコーダ層数 |
+| `num_decoder_layers` | int | Transformer デコーダ層数 |
+| `hidden_dim` | int | Transformer 隠れ層次元数 |
+| `nheads` | int | マルチヘッドアテンションのヘッド数 |
+| `num_classes` | int | クラス数（COCO は 91） |
+| `pretrained` | bool | ResNet-50 バックボーンに事前学習済み重みを使用するか |
 
 ## CLI 上書きの例
 
@@ -143,8 +154,8 @@ Hydra はドット記法で任意のキーを上書きできます。
 
 ```bash
 # 複数キーを同時指定
-uv run src/engine.py model=dino_v3 learning.epochs=30 device=cuda
+uv run src/engine.py model=vit_faster_rcnn learning.epochs=30 device=cuda
 
 # Tiny COCO 設定でモデルだけ変える
-uv run src/engine.py --config-name config_tiny model=ssd
+uv run src/engine.py --config-name config_tiny model=detr
 ```
