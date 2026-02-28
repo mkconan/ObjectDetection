@@ -27,20 +27,11 @@ IMAGE_URLS = [
 
 OUTPUT_PATH = "outputs/dino_pca_visualization.png"
 
-# 入力解像度（大きいほどパッチ数が増えて高解像度になる）
-# 224 → 14×14=196 patches
-# 448 → 28×28=784 patches  ← 4倍
-# 560 → 35×35=1225 patches
-INPUT_SIZE = 560
-
 # ──────────────────────────────────────────────
 # モデルのロード
 # ──────────────────────────────────────────────
 print(f"Loading model: {PRETRAINED_MODEL}")
-processor = AutoImageProcessor.from_pretrained(
-    PRETRAINED_MODEL,
-    size={"height": INPUT_SIZE, "width": INPUT_SIZE},
-)
+processor = AutoImageProcessor.from_pretrained(PRETRAINED_MODEL)
 model = AutoModel.from_pretrained(PRETRAINED_MODEL, device_map="auto")
 model.eval()
 print(f"Model device: {next(model.parameters()).device}")
@@ -65,7 +56,17 @@ for i, url in enumerate(IMAGE_URLS):
     img = load_image(url)
     images.append(img)
 
-    inputs = processor(images=img, return_tensors="pt", size={"height": INPUT_SIZE, "width": INPUT_SIZE}).to(model.device)
+    # オリジナル画像サイズをパッチサイズの倍数に切り捨て
+    orig_w, orig_h = img.size  # PIL: (width, height)
+    input_h = (orig_h // patch_size) * patch_size
+    input_w = (orig_w // patch_size) * patch_size
+
+    inputs = processor(
+        images=img,
+        return_tensors="pt",
+        size={"height": input_h, "width": input_w},
+        do_resize=True,
+    ).to(model.device)
     # pixel_values shape: [1, C, H, W] → H, W からパッチグリッドを計算
     _, c, img_h, img_w = inputs["pixel_values"].shape
     h_patches = img_h // patch_size
@@ -79,7 +80,7 @@ for i, url in enumerate(IMAGE_URLS):
     # CLS (idx0) とレジスタトークン (1..skip-1) をスキップ
     patch_tokens = outputs.last_hidden_state[0, skip:, :]  # [N_patches, D]
     patch_features_list.append(patch_tokens)
-    print(f"    input size: {img_h}x{img_w}, patch grid: {h_patches}x{w_patches}, tokens: {patch_tokens.shape}")
+    print(f"    original: {orig_w}x{orig_h} → input: {img_w}x{img_h}, patch grid: {h_patches}x{w_patches}, tokens: {patch_tokens.shape}")
 
 # ──────────────────────────────────────────────
 # 全画像分のパッチをスタックして PCA (torch)
