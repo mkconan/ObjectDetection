@@ -580,10 +580,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#confmodeldino_v3yaml" class="md-nav__link">
+  <a href="#confmodelvit_faster_rcnnyaml" class="md-nav__link">
     <span class="md-ellipsis">
       
-        conf/model/dino_v3.yaml
+        conf/model/vit_faster_rcnn.yaml
       
     </span>
   </a>
@@ -817,10 +817,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#confmodeldino_v3yaml" class="md-nav__link">
+  <a href="#confmodelvit_faster_rcnnyaml" class="md-nav__link">
     <span class="md-ellipsis">
       
-        conf/model/dino_v3.yaml
+        conf/model/vit_faster_rcnn.yaml
       
     </span>
   </a>
@@ -874,9 +874,9 @@
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── config.yaml         # フル COCO 用メイン設定
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── config_tiny.yaml    # Tiny COCO 用最小設定
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>└── model/
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    ├── ssd.yaml        # SSD モデル設定
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    ├── dino_v3.yaml    # DINOv3 モデル設定
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    └── detr.yaml       # DETR モデル設定（未実装）
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    ├── ssd.yaml             # SSD モデル設定
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    ├── vit_faster_rcnn.yaml # ViT + Faster R-CNN モデル設定
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    └── detr.yaml            # DETR モデル設定
 </code></pre></div>
 <h2 id="confconfigyaml"><code>conf/config.yaml</code><a class="headerlink" href="#confconfigyaml" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">defaults</span><span class="p">:</span>
@@ -980,7 +980,7 @@
 <p>Tiny COCO 向けの最小設定です。エポック数 2、バッチサイズ 16 で動作確認用に使います。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">defaults</span><span class="p">:</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_self_</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dino_v3</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vit_faster_rcnn</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nt">data</span><span class="p">:</span>
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;data/coco_tiny/images/train2017&quot;</span>
@@ -1038,8 +1038,8 @@
 </tr>
 </tbody>
 </table>
-<h2 id="confmodeldino_v3yaml"><code>conf/model/dino_v3.yaml</code><a class="headerlink" href="#confmodeldino_v3yaml" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dino_v3</span>
+<h2 id="confmodelvit_faster_rcnnyaml"><code>conf/model/vit_faster_rcnn.yaml</code><a class="headerlink" href="#confmodelvit_faster_rcnnyaml" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vit_faster_rcnn</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nt">image_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">224</span>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nt">num_classes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">91</span>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="nt">pretrained</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
@@ -1081,18 +1081,68 @@
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nt">num_encoder_layers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6</span>
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nt">num_decoder_layers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6</span>
 <a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="nt">hidden_dim</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="nt">nheads</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="nt">num_classes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">91</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="nt">pretrained</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 </code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">未実装</p>
-<p>DETR のモデル実装は現在存在しません。設定ファイルのみで、<code>model=detr</code> を指定するとエラーになります。</p>
-</div>
+<table>
+<thead>
+<tr>
+<th>キー</th>
+<th>型</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>str</td>
+<td>モデル識別子</td>
+</tr>
+<tr>
+<td><code>num_queries</code></td>
+<td>int</td>
+<td>オブジェクトクエリ数</td>
+</tr>
+<tr>
+<td><code>num_encoder_layers</code></td>
+<td>int</td>
+<td>Transformer エンコーダ層数</td>
+</tr>
+<tr>
+<td><code>num_decoder_layers</code></td>
+<td>int</td>
+<td>Transformer デコーダ層数</td>
+</tr>
+<tr>
+<td><code>hidden_dim</code></td>
+<td>int</td>
+<td>Transformer 隠れ層次元数</td>
+</tr>
+<tr>
+<td><code>nheads</code></td>
+<td>int</td>
+<td>マルチヘッドアテンションのヘッド数</td>
+</tr>
+<tr>
+<td><code>num_classes</code></td>
+<td>int</td>
+<td>クラス数（COCO は 91）</td>
+</tr>
+<tr>
+<td><code>pretrained</code></td>
+<td>bool</td>
+<td>ResNet-50 バックボーンに事前学習済み重みを使用するか</td>
+</tr>
+</tbody>
+</table>
 <h2 id="cli">CLI 上書きの例<a class="headerlink" href="#cli" title="Permanent link">&para;</a></h2>
 <p>Hydra はドット記法で任意のキーを上書きできます。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># 複数キーを同時指定</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>uv<span class="w"> </span>run<span class="w"> </span>src/engine.py<span class="w"> </span><span class="nv">model</span><span class="o">=</span>dino_v3<span class="w"> </span>learning.epochs<span class="o">=</span><span class="m">30</span><span class="w"> </span><span class="nv">device</span><span class="o">=</span>cuda
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>uv<span class="w"> </span>run<span class="w"> </span>src/engine.py<span class="w"> </span><span class="nv">model</span><span class="o">=</span>vit_faster_rcnn<span class="w"> </span>learning.epochs<span class="o">=</span><span class="m">30</span><span class="w"> </span><span class="nv">device</span><span class="o">=</span>cuda
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Tiny COCO 設定でモデルだけ変える</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>uv<span class="w"> </span>run<span class="w"> </span>src/engine.py<span class="w"> </span>--config-name<span class="w"> </span>config_tiny<span class="w"> </span><span class="nv">model</span><span class="o">=</span>ssd
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>uv<span class="w"> </span>run<span class="w"> </span>src/engine.py<span class="w"> </span>--config-name<span class="w"> </span>config_tiny<span class="w"> </span><span class="nv">model</span><span class="o">=</span>detr
 </code></pre></div>
 
 

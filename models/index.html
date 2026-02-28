@@ -629,15 +629,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#dinov3" class="md-nav__link">
+  <a href="#vit-faster-r-cnn" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DINOv3
+        ViT + Faster R-CNN
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="DINOv3">
+    <nav class="md-nav" aria-label="ViT + Faster R-CNN">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -682,15 +682,54 @@
   <a href="#detr" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DETR（設定のみ・未実装）
+        DETR
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DETR">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概要
       
     </span>
   </a>
   
 </li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        設定パラメータ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        学習コマンド
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
+  <a href="#_13" class="md-nav__link">
     <span class="md-ellipsis">
       
         新しいモデルを追加する
@@ -900,15 +939,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#dinov3" class="md-nav__link">
+  <a href="#vit-faster-r-cnn" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DINOv3
+        ViT + Faster R-CNN
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="DINOv3">
+    <nav class="md-nav" aria-label="ViT + Faster R-CNN">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -953,15 +992,54 @@
   <a href="#detr" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DETR（設定のみ・未実装）
+        DETR
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DETR">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概要
       
     </span>
   </a>
   
 </li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        設定パラメータ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        学習コマンド
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
+  <a href="#_13" class="md-nav__link">
     <span class="md-ellipsis">
       
         新しいモデルを追加する
@@ -993,9 +1071,10 @@
 <p>このプロジェクトでは <strong>Strategy パターン</strong> を採用しており、<code>LightningModule</code> を継承した基底クラス <code>ModelStrategy</code> から各モデルを実装します。</p>
 <h2 id="_2">アーキテクチャ概要<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>src/models/
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── model_base.py   # 抽象基底クラス ModelStrategy
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── ssd.py          # SSD 実装
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>└── dino_v3.py      # DINOv3 実装
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── model_base.py        # 抽象基底クラス ModelStrategy
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── ssd.py               # SSD 実装
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── vit_faster_rcnn.py   # ViT + Faster R-CNN 実装
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>└── detr.py              # DETR 実装
 </code></pre></div>
 <p><code>engine.py</code> はモデル名（<code>config.model.name</code>）に応じてクラスをインスタンス化し、PyTorch Lightning の <code>Trainer.fit()</code> に渡します。</p>
 <h2 id="modelstrategy">ModelStrategy（基底クラス）<a class="headerlink" href="#modelstrategy" title="Permanent link">&para;</a></h2>
@@ -1071,13 +1150,15 @@
 <li><code>training_step()</code> で損失を計算し <code>self.log("train_loss", ...)</code> でログ</li>
 <li><code>validation_step()</code> で <code>val_loss</code> をログ</li>
 </ul>
-<h2 id="dinov3">DINOv3<a class="headerlink" href="#dinov3" title="Permanent link">&para;</a></h2>
-<p><code>src/models/dino_v3.py</code> / 設定: <code>conf/model/dino_v3.yaml</code></p>
+<h2 id="vit-faster-r-cnn">ViT + Faster R-CNN<a class="headerlink" href="#vit-faster-r-cnn" title="Permanent link">&para;</a></h2>
+<p><code>src/models/vit_faster_rcnn.py</code> / 設定: <code>conf/model/vit_faster_rcnn.yaml</code></p>
 <h3 id="_7">概要<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <ul>
-<li>DINOv3 ベースの検出モデル</li>
+<li>バックボーン: Vision Transformer（ViT-B/16）</li>
+<li>検出ヘッド: Faster R-CNN</li>
 <li>入力サイズ: 224×224（正方形）</li>
 <li>COCO の 91 クラスに対応</li>
+<li>バックボーンパラメータは凍結し、検出ヘッドのみ学習</li>
 </ul>
 <h3 id="_8">設定パラメータ<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <table>
@@ -1107,10 +1188,22 @@
 </tbody>
 </table>
 <h3 id="_9">学習コマンド<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>uv<span class="w"> </span>run<span class="w"> </span>src/engine.py<span class="w"> </span><span class="nv">model</span><span class="o">=</span>dino_v3
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>uv<span class="w"> </span>run<span class="w"> </span>src/engine.py<span class="w"> </span><span class="nv">model</span><span class="o">=</span>vit_faster_rcnn
 </code></pre></div>
-<h2 id="detr">DETR（設定のみ・未実装）<a class="headerlink" href="#detr" title="Permanent link">&para;</a></h2>
-<p><code>conf/model/detr.yaml</code> に設定ファイルのみ存在します。モデル実装は今後の追加予定です。</p>
+<h2 id="detr">DETR<a class="headerlink" href="#detr" title="Permanent link">&para;</a></h2>
+<p><code>src/models/detr.py</code> / 設定: <code>conf/model/detr.yaml</code></p>
+<h3 id="_10">概要<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
+<p>DETR（DEtection TRansformer）は Carion et al. (2020) が提案したエンドツーエンド物体検出モデルです。<br />
+アンカーや NMS を使わず、Transformer のエンコーダ‐デコーダと Hungarian マッチング損失だけで検出を行います。</p>
+<ul>
+<li>バックボーン: ResNet-50（avgpool / fc を除去、1×1 Conv で <code>hidden_dim</code> チャンネルに射影）</li>
+<li>位置エンコーディング: 2D サイン / コサイン（論文準拠）</li>
+<li>Transformer: 標準の <code>nn.Transformer</code>（エンコーダ + デコーダ）</li>
+<li>オブジェクトクエリ: 学習可能な埋め込み（デフォルト 100 個）</li>
+<li>予測ヘッド: クラスロジットヘッド + 3 層 MLP バウンディングボックスヘッド</li>
+<li>損失: Hungarian マッチングによる二部グラフマッチング（分類 + L1 + GIoU）</li>
+</ul>
+<h3 id="_11">設定パラメータ<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -1123,30 +1216,47 @@
 <tr>
 <td><code>num_queries</code></td>
 <td>100</td>
-<td>クエリ数</td>
+<td>オブジェクトクエリ数</td>
 </tr>
 <tr>
 <td><code>num_encoder_layers</code></td>
 <td>6</td>
-<td>エンコーダ層数</td>
+<td>Transformer エンコーダ層数</td>
 </tr>
 <tr>
 <td><code>num_decoder_layers</code></td>
 <td>6</td>
-<td>デコーダ層数</td>
+<td>Transformer デコーダ層数</td>
 </tr>
 <tr>
 <td><code>hidden_dim</code></td>
 <td>256</td>
-<td>隠れ層次元数</td>
+<td>Transformer 隠れ層次元数</td>
+</tr>
+<tr>
+<td><code>nheads</code></td>
+<td>8</td>
+<td>マルチヘッドアテンションのヘッド数</td>
+</tr>
+<tr>
+<td><code>num_classes</code></td>
+<td>91</td>
+<td>クラス数（COCO は 91）</td>
+</tr>
+<tr>
+<td><code>pretrained</code></td>
+<td>false</td>
+<td>ResNet-50 バックボーンに事前学習済み重みを使用するか</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p><code>model=detr</code> を指定するとエラーになります。</p>
-</div>
-<h2 id="_10">新しいモデルを追加する<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<h3 id="_12">学習コマンド<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>uv<span class="w"> </span>run<span class="w"> </span>src/engine.py<span class="w"> </span><span class="nv">model</span><span class="o">=</span>detr
+</code></pre></div>
+<p>複数パラメータの上書き例:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>uv<span class="w"> </span>run<span class="w"> </span>src/engine.py<span class="w"> </span><span class="nv">model</span><span class="o">=</span>detr<span class="w"> </span>learning.epochs<span class="o">=</span><span class="m">50</span><span class="w"> </span>optimizer.learning_rate<span class="o">=</span><span class="m">0</span>.0001<span class="w"> </span><span class="nv">device</span><span class="o">=</span>cuda
+</code></pre></div>
+<h2 id="_13">新しいモデルを追加する<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h2>
 <ol>
 <li><code>src/models/your_model.py</code> を作成し <code>ModelStrategy</code> を継承</li>
 <li><code>conf/model/your_model.yaml</code> を作成し <code>name: your_model</code> を設定</li>

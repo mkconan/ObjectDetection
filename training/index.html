@@ -845,8 +845,11 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># SSD（デフォルト）</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>uv<span class="w"> </span>run<span class="w"> </span>src/engine.py<span class="w"> </span><span class="nv">model</span><span class="o">=</span>ssd
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># DINOv3</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>uv<span class="w"> </span>run<span class="w"> </span>src/engine.py<span class="w"> </span><span class="nv">model</span><span class="o">=</span>dino_v3
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># ViT + Faster R-CNN</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>uv<span class="w"> </span>run<span class="w"> </span>src/engine.py<span class="w"> </span><span class="nv">model</span><span class="o">=</span>vit_faster_rcnn
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># DETR</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>uv<span class="w"> </span>run<span class="w"> </span>src/engine.py<span class="w"> </span><span class="nv">model</span><span class="o">=</span>detr
 </code></pre></div>
 <h2 id="_4">主なパラメータ上書き<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># バッチサイズ</span>
@@ -862,7 +865,7 @@
 <a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>uv<span class="w"> </span>run<span class="w"> </span>src/engine.py<span class="w"> </span><span class="nv">device</span><span class="o">=</span>mps
 </code></pre></div>
 <p>複数の上書きは同時に指定できます。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>uv<span class="w"> </span>run<span class="w"> </span>src/engine.py<span class="w"> </span><span class="nv">model</span><span class="o">=</span>dino_v3<span class="w"> </span><span class="nv">device</span><span class="o">=</span>cuda<span class="w"> </span>learning.epochs<span class="o">=</span><span class="m">30</span><span class="w"> </span>learning.batch_size<span class="o">=</span><span class="m">8</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>uv<span class="w"> </span>run<span class="w"> </span>src/engine.py<span class="w"> </span><span class="nv">model</span><span class="o">=</span>vit_faster_rcnn<span class="w"> </span><span class="nv">device</span><span class="o">=</span>cuda<span class="w"> </span>learning.epochs<span class="o">=</span><span class="m">30</span><span class="w"> </span>learning.batch_size<span class="o">=</span><span class="m">8</span>
 </code></pre></div>
 <h2 id="tiny-coco">Tiny COCO で最小実行<a class="headerlink" href="#tiny-coco" title="Permanent link">&para;</a></h2>
 <p>動作確認や開発中は <code>conf/config_tiny.yaml</code> を使うと高速に回せます。</p>
@@ -875,7 +878,7 @@
 <a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># モデルやデバイスも上書き可能</span>
 <a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>uv<span class="w"> </span>run<span class="w"> </span>src/engine.py<span class="w"> </span>--config-name<span class="w"> </span>config_tiny<span class="w"> </span><span class="nv">model</span><span class="o">=</span>ssd<span class="w"> </span><span class="nv">device</span><span class="o">=</span>mps
 </code></pre></div>
-<p><code>config_tiny.yaml</code> はデフォルトで <code>dino_v3</code> / <code>batch_size=16</code> / <code>epochs=2</code> の設定です。</p>
+<p><code>config_tiny.yaml</code> はデフォルトで <code>vit_faster_rcnn</code> / <code>batch_size=16</code> / <code>epochs=2</code> の設定です。</p>
 <h2 id="_5">出力ファイル<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
