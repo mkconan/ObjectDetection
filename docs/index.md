@@ -8,7 +8,7 @@ COCO フォーマットのデータセットを使い、複数の検出モデル
 - **PyTorch Lightning** — 学習ループ・検証・チェックポイントを自動管理
 - **Hydra** — YAML ベースの柔軟な設定管理と CLI 上書き
 - **COCO データセット** — 標準フォーマット対応
-- **複数モデル対応** — SSD, DINOv3 を実装済み（今後拡張可能）
+- **複数モデル対応** — SSD, ViT + Faster R-CNN, DETR を実装済み（今後拡張可能）
 - **ロギング** — MLflow / TensorBoard / CSV に対応
 
 ## 現在の実装状況
@@ -19,8 +19,8 @@ COCO フォーマットのデータセットを使い、複数の検出モデル
 | データモジュール | `src/core/data_module.py` | ✅ 実装済み |
 | モデル基底クラス | `src/models/model_base.py` | ✅ 実装済み |
 | SSD | `src/models/ssd.py` | ✅ 実装済み |
-| DINOv3 | `src/models/dino_v3.py` | ✅ 実装済み |
-| DETR | `src/models/detr.py` | 🔧 設定のみ（未実装） |
+| ViT + Faster R-CNN | `src/models/vit_faster_rcnn.py` | ✅ 実装済み |
+| DETR | `src/models/detr.py` | ✅ 実装済み |
 
 ## クイックスタート
 
