@@ -3,3 +3,6 @@ num_queries: 100
 num_encoder_layers: 6
 num_decoder_layers: 6
 hidden_dim: 256
+nheads: 8
+num_classes: 91
+pretrained: false

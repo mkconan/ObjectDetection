@@ -1,4 +1,5 @@
 from core.data_module import CocoDetectionDataModule
+from models.detr import DETR
 from models.ssd import SSD
 from models.vit_faster_rcnn import ViTFasterRCNN
 
@@ -43,6 +44,8 @@ def main(config: DictConfig):
         model = SSD(config=config)
     elif model_name == "vit_faster_rcnn":
         model = ViTFasterRCNN(config=config)
+    elif model_name == "detr":
+        model = DETR(config=config)
     else:
         raise ValueError(f"Unknown model: {model_name}")
 
