@@ -683,6 +683,117 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sample_dino_v3py" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sample_dino_v3.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sample_dino_v3.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        実行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概要
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        前提
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visualize_dino_pcapy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        visualize_dino_pca.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="visualize_dino_pca.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        実行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        出力
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概要
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        前提
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -883,6 +994,117 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sample_dino_v3py" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sample_dino_v3.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sample_dino_v3.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        実行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概要
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        前提
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visualize_dino_pcapy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        visualize_dino_pca.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="visualize_dino_pca.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        実行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        出力
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        概要
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        前提
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -942,6 +1164,45 @@
 <li><code>uv run scripts/your_script.py</code> で単体実行できるようにする</li>
 <li>引数が必要なら <code>argparse</code> か <code>Hydra</code> で受け取る</li>
 <li>依存パッケージは <code>uv add</code> で <code>pyproject.toml</code> に追記する</li>
+</ul>
+<h2 id="sample_dino_v3py">sample_dino_v3.py<a class="headerlink" href="#sample_dino_v3py" title="Permanent link">&para;</a></h2>
+<p>HuggingFace Transformers の DINOv3 モデルを使って、画像から特徴量を抽出するサンプルスクリプトです。<br />
+<code>AutoModel</code> による直接推論と <code>pipeline</code> による特徴抽出の 2 つの方法を示します。</p>
+<h3 id="_8">実行<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>uv<span class="w"> </span>run<span class="w"> </span>scripts/sample_dino_v3.py
+</code></pre></div>
+<h3 id="_9">概要<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
+<ul>
+<li>モデル: <code>facebook/dinov3-vits16plus-pretrain-lvd1689m</code></li>
+<li>COCO 画像を URL から取得し、pooled output の shape を表示</li>
+<li><code>image-feature-extraction</code> パイプラインを使った特徴抽出も実行</li>
+</ul>
+<h3 id="_10">前提<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
+<ul>
+<li>インターネット接続（画像ダウンロード・モデルダウンロード）</li>
+<li><code>transformers</code>, <code>torch</code> がインストール済みであること（<code>uv sync</code> で解決）</li>
+</ul>
+<h2 id="visualize_dino_pcapy">visualize_dino_pca.py<a class="headerlink" href="#visualize_dino_pcapy" title="Permanent link">&para;</a></h2>
+<p>DINOv3 のパッチレベル特徴量を 3 次元 PCA で可視化するスクリプトです。<br />
+PC1→R, PC2→G, PC3→B にマッピングし、元画像と並べて保存します。</p>
+<h3 id="_11">実行<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>uv<span class="w"> </span>run<span class="w"> </span>scripts/visualize_dino_pca.py
+</code></pre></div>
+<h3 id="_12">出力<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>outputs/dino_pca_visualization.png</code> — 元画像と PCA 可視化の比較画像</li>
+</ul>
+<h3 id="_13">概要<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h3>
+<ul>
+<li>モデル: <code>facebook/dinov3-vits16plus-pretrain-lvd1689m</code></li>
+<li>複数の COCO 画像を URL から取得</li>
+<li>全画像のパッチ特徴量をまとめて PCA し、グローバルに正規化</li>
+<li><code>matplotlib</code> で 2 列（元画像 / PCA マップ）のグリッドを生成</li>
+</ul>
+<h3 id="_14">前提<a class="headerlink" href="#_14" title="Permanent link">&para;</a></h3>
+<ul>
+<li>インターネット接続（画像ダウンロード・モデルダウンロード）</li>
+<li><code>transformers</code>, <code>torch</code>, <code>matplotlib</code> がインストール済みであること（<code>uv sync</code> で解決）</li>
 </ul>
 
 
