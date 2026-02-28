@@ -14,7 +14,9 @@ VAL_DIR = TINY_ROOT / "images" / "val2017"
 ANN_DIR = TINY_ROOT / "annotations"
 
 
-def _make_image(path: Path, width: int, height: int, box: tuple[int, int, int, int]) -> None:
+def _make_image(
+    path: Path, width: int, height: int, box: tuple[int, int, int, int]
+) -> None:
     """Create a simple image with a colored rectangle."""
     img = Image.new("RGB", (width, height), color=(245, 245, 240))
     draw = ImageDraw.Draw(img)
@@ -40,7 +42,9 @@ def main() -> None:
     VAL_DIR.mkdir(parents=True, exist_ok=True)
     ANN_DIR.mkdir(parents=True, exist_ok=True)
 
-    def make_split(split_dir: Path, split_name: str, image_count: int, start_id: int) -> None:
+    def make_split(
+        split_dir: Path, split_name: str, image_count: int, start_id: int
+    ) -> None:
         images = []
         annotations = []
         ann_id = start_id * 100
