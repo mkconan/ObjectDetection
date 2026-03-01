@@ -565,6 +565,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="ModelStrategy（基底クラス）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#predict_boxes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        predict_boxes() の戻り値
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -875,6 +892,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="ModelStrategy（基底クラス）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#predict_boxes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        predict_boxes() の戻り値
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1104,8 +1138,41 @@
 <td><code>configure_optimizers()</code></td>
 <td>オプティマイザーの設定</td>
 </tr>
+<tr>
+<td><code>predict_boxes(images, score_threshold)</code></td>
+<td><strong>推論専用メソッド</strong>（eval モードで実行し、スコアフィルタ済みの bbox を返す）</td>
+</tr>
 </tbody>
 </table>
+<h3 id="predict_boxes"><code>predict_boxes()</code> の戻り値<a class="headerlink" href="#predict_boxes" title="Permanent link">&para;</a></h3>
+<p><code>List[Dict]</code> 形式で、各要素は以下のキーを持ちます。</p>
+<table>
+<thead>
+<tr>
+<th>キー</th>
+<th>型</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>boxes</code></td>
+<td><code>Tensor (N, 4)</code></td>
+<td>xyxy ピクセル座標の予測 bbox</td>
+</tr>
+<tr>
+<td><code>labels</code></td>
+<td><code>Tensor (N,)</code></td>
+<td>クラスインデックス</td>
+</tr>
+<tr>
+<td><code>scores</code></td>
+<td><code>Tensor (N,)</code></td>
+<td>信頼度スコア</td>
+</tr>
+</tbody>
+</table>
+<p>このメソッドは <code>BboxVisualizationCallback</code> から呼び出されます。</p>
 <h2 id="ssd">SSD<a class="headerlink" href="#ssd" title="Permanent link">&para;</a></h2>
 <p><code>src/models/ssd.py</code> / 設定: <code>conf/model/ssd.yaml</code></p>
 <h3 id="_3">概要<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
@@ -1261,6 +1328,7 @@
 <li><code>src/models/your_model.py</code> を作成し <code>ModelStrategy</code> を継承</li>
 <li><code>conf/model/your_model.yaml</code> を作成し <code>name: your_model</code> を設定</li>
 <li><code>src/engine.py</code> のモデル選択ブロックに <code>elif model_name == "your_model":</code> を追加</li>
+<li><code>predict_boxes(images, score_threshold=0.5)</code> を実装して可視化コールバックに対応させる</li>
 </ol>
 
 

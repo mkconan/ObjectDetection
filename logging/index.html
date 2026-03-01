@@ -655,6 +655,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        検出結果の可視化
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -672,7 +683,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         生成物ディレクトリの扱い
@@ -683,7 +694,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         チェックポイント
@@ -695,7 +706,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         チェックポイントから再開
@@ -828,6 +839,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        検出結果の可視化
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -845,7 +867,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         生成物ディレクトリの扱い
@@ -856,7 +878,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         チェックポイント
@@ -868,7 +890,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         チェックポイントから再開
@@ -973,14 +995,56 @@
 <td><code>null</code></td>
 <td><code>null</code> なら自動生成</td>
 </tr>
+<tr>
+<td><code>mlflow.visualization.num_images</code></td>
+<td><code>4</code></td>
+<td>可視化する検証画像の枚数</td>
+</tr>
+<tr>
+<td><code>mlflow.visualization.score_threshold</code></td>
+<td><code>0.5</code></td>
+<td>可視化に表示する予測 bbox の最低信頼度</td>
+</tr>
 </tbody>
 </table>
+<h3 id="_6">検出結果の可視化<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<p><code>mlflow.visualization</code> セクションが設定されていると、各エポック終了時に検証データの先頭 <code>num_images</code> 枚に対して推論を実行し、GT bbox と予測 bbox を重畳した画像を MLflow に記録します。</p>
+<p><strong>描画の凡例</strong></p>
+<table>
+<thead>
+<tr>
+<th>色</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>緑（<code>lime</code>）</td>
+<td>Ground Truth bbox + クラスラベル</td>
+</tr>
+<tr>
+<td>赤（<code>red</code>）</td>
+<td>予測 bbox + クラスラベル + 信頼度スコア</td>
+</tr>
+</tbody>
+</table>
+<p>画像は MLflow Artifacts の <code>val_vis/</code> ディレクトリに <code>epoch_{NNN}_img{N}.png</code> という名前で保存されます。</p>
+<p><strong>設定例</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">mlflow</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">experiment_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ssd_detection&quot;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">tracking_uri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nt">run_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">visualization</span><span class="p">:</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="nt">num_images</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w">      </span><span class="c1"># 可視化する画像枚数</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="nt">score_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span><span class="w">  </span><span class="c1"># 表示スコア閾値</span>
+</code></pre></div>
+<p>可視化を無効にするには <code>visualization</code> セクションごと削除してください。実装は <code>src/core/callbacks.py</code> の <code>BboxVisualizationCallback</code> が担います。</p>
 <h2 id="tensorboard">TensorBoard<a class="headerlink" href="#tensorboard" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>uv<span class="w"> </span>run<span class="w"> </span>tensorboard<span class="w"> </span>--logdir<span class="w"> </span>lightning_logs<span class="w"> </span>--port<span class="w"> </span><span class="m">6006</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>uv<span class="w"> </span>run<span class="w"> </span>tensorboard<span class="w"> </span>--logdir<span class="w"> </span>lightning_logs<span class="w"> </span>--port<span class="w"> </span><span class="m">6006</span>
 </code></pre></div>
 <p>ブラウザで <code>http://localhost:6006</code> に接続して確認できます。</p>
 <p>ログは <code>lightning_logs/{model}_detection/version_N/</code> に保存されます。</p>
-<h2 id="_6">生成物ディレクトリの扱い<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<h2 id="_7">生成物ディレクトリの扱い<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <p>以下のディレクトリは学習によって生成されるもので、ドキュメント管理の対象外です。</p>
 <table>
 <thead>
@@ -1005,13 +1069,13 @@
 </tbody>
 </table>
 <p>これらは <code>.gitignore</code> に登録して Git 管理から除外することを推奨します。</p>
-<h2 id="_7">チェックポイント<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<h2 id="_8">チェックポイント<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <p>チェックポイントは <code>outputs/</code> に自動保存されます。</p>
 <ul>
 <li>命名規則: <code>{model}-epoch={epoch:02d}-val_loss={val_loss:.2f}.ckpt</code></li>
 <li>保持数: <code>val_loss</code> が低い上位 3 件（<code>save_top_k=3</code>）</li>
 </ul>
-<h3 id="_8">チェックポイントから再開<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<h3 id="_9">チェックポイントから再開<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
 <p>PyTorch Lightning の <code>Trainer</code> はチェックポイントからの再開をサポートしています（現在の <code>engine.py</code> では明示的な指定が必要です）。</p>
 
 

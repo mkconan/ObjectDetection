@@ -903,6 +903,9 @@
 <a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">  </span><span class="nt">experiment_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ssd_detection&quot;</span>
 <a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">  </span><span class="nt">tracking_uri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w">     </span><span class="c1"># null → ./mlruns, サーバー利用時は &quot;http://localhost:5000&quot;</span>
 <a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">  </span><span class="nt">run_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w">         </span><span class="c1"># null → 自動生成</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">  </span><span class="nt">visualization</span><span class="p">:</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">    </span><span class="nt">num_images</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w">        </span><span class="c1"># エポック終了時に可視化する検証画像枚数</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">    </span><span class="nt">score_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span><span class="w"> </span><span class="c1"># 表示する予測 bbox の最低信頼度</span>
 </code></pre></div>
 <h3 id="_3">各キーの説明<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
 <table>
@@ -973,6 +976,16 @@
 <td><code>mlflow.run_name</code></td>
 <td>str|null</td>
 <td>MLflow ラン名（null で自動生成）</td>
+</tr>
+<tr>
+<td><code>mlflow.visualization.num_images</code></td>
+<td>int</td>
+<td>可視化する検証画像枚数（セクション省略で無効化）</td>
+</tr>
+<tr>
+<td><code>mlflow.visualization.score_threshold</code></td>
+<td>float</td>
+<td>可視化で表示する予測 bbox の最低信頼度</td>
 </tr>
 </tbody>
 </table>

@@ -753,6 +753,7 @@ COCO フォーマットのデータセットを使い、複数の検出モデル
 <li><strong>COCO データセット</strong> — 標準フォーマット対応</li>
 <li><strong>複数モデル対応</strong> — SSD, ViT + Faster R-CNN, DETR を実装済み（今後拡張可能）</li>
 <li><strong>ロギング</strong> — MLflow / TensorBoard / CSV に対応</li>
+<li><strong>Bbox 可視化</strong> — エポック終了時に GT / 予測 bbox を重畳した画像を MLflow Artifacts に自動保存</li>
 </ul>
 <h2 id="_2">現在の実装状況<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <table>
@@ -792,6 +793,11 @@ COCO フォーマットのデータセットを使い、複数の検出モデル
 <tr>
 <td>DETR</td>
 <td><code>src/models/detr.py</code></td>
+<td>✅ 実装済み</td>
+</tr>
+<tr>
+<td>Bbox 可視化コールバック</td>
+<td><code>src/core/callbacks.py</code></td>
 <td>✅ 実装済み</td>
 </tr>
 </tbody>
