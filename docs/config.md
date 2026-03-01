@@ -41,6 +41,9 @@ mlflow:
   experiment_name: "ssd_detection"
   tracking_uri: null     # null → ./mlruns, サーバー利用時は "http://localhost:5000"
   run_name: null         # null → 自動生成
+  visualization:
+    num_images: 4        # エポック終了時に可視化する検証画像枚数
+    score_threshold: 0.5 # 表示する予測 bbox の最低信頼度
 ```
 
 ### 各キーの説明
@@ -59,6 +62,8 @@ mlflow:
 | `mlflow.experiment_name` | str | MLflow 実験名 |
 | `mlflow.tracking_uri` | str\|null | MLflow サーバー URI（null で `./mlruns`） |
 | `mlflow.run_name` | str\|null | MLflow ラン名（null で自動生成） |
+| `mlflow.visualization.num_images` | int | 可視化する検証画像枚数（セクション省略で無効化） |
+| `mlflow.visualization.score_threshold` | float | 可視化で表示する予測 bbox の最低信頼度 |
 
 ## `conf/config_tiny.yaml`
 

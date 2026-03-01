@@ -45,6 +45,35 @@ mlflow:
 | `mlflow.experiment_name` | `"ssd_detection"` | 実験名 |
 | `mlflow.tracking_uri` | `null` | `null` なら `./mlruns` を使用 |
 | `mlflow.run_name` | `null` | `null` なら自動生成 |
+| `mlflow.visualization.num_images` | `4` | 可視化する検証画像の枚数 |
+| `mlflow.visualization.score_threshold` | `0.5` | 可視化に表示する予測 bbox の最低信頼度 |
+
+### 検出結果の可視化
+
+`mlflow.visualization` セクションが設定されていると、各エポック終了時に検証データの先頭 `num_images` 枚に対して推論を実行し、GT bbox と予測 bbox を重畳した画像を MLflow に記録します。
+
+**描画の凡例**
+
+| 色 | 内容 |
+|---|---|
+| 緑（`lime`） | Ground Truth bbox + クラスラベル |
+| 赤（`red`） | 予測 bbox + クラスラベル + 信頼度スコア |
+
+画像は MLflow Artifacts の `val_vis/` ディレクトリに `epoch_{NNN}_img{N}.png` という名前で保存されます。
+
+**設定例**
+
+```yaml
+mlflow:
+  experiment_name: "ssd_detection"
+  tracking_uri: null
+  run_name: null
+  visualization:
+    num_images: 4      # 可視化する画像枚数
+    score_threshold: 0.5  # 表示スコア閾値
+```
+
+可視化を無効にするには `visualization` セクションごと削除してください。実装は `src/core/callbacks.py` の `BboxVisualizationCallback` が担います。
 
 ## TensorBoard
 

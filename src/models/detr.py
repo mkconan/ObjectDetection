@@ -387,6 +387,57 @@ class DETR(ModelStrategy):
 
         return loss
 
+    @torch.no_grad()
+    def predict_boxes(self, images, score_threshold=0.5):
+        """Run inference and return filtered detections.
+
+        Args:
+            images: List of image tensors (on device).
+            score_threshold: Minimum confidence to keep a detection.
+
+        Returns:
+            List of dicts, each with:
+                - 'boxes': (N, 4) tensor in xyxy pixel coordinates
+                - 'labels': (N,) tensor of class indices
+                - 'scores': (N,) tensor of confidence scores
+        """
+        was_training = self.training
+        self.eval()
+
+        if isinstance(images, (list, tuple)):
+            x = torch.stack(images, dim=0)
+        else:
+            x = images
+
+        outputs_class, outputs_bbox = self(images)
+        # outputs_class: (B, num_queries, num_classes+1)
+        # outputs_bbox:  (B, num_queries, 4) cxcywh normalized
+
+        B = outputs_class.shape[0]
+        results = []
+        for i in range(B):
+            probs = outputs_class[i].softmax(dim=-1)  # (num_queries, num_classes+1)
+            # Exclude no-object class (last index)
+            scores, labels = probs[:, :-1].max(dim=-1)  # (num_queries,)
+
+            keep = scores > score_threshold
+            scores = scores[keep]
+            labels = labels[keep]
+            boxes = outputs_bbox[i][keep]  # (N, 4) cxcywh normalized
+
+            # Convert to xyxy pixel coordinates
+            img_h, img_w = images[i].shape[-2], images[i].shape[-1]
+            boxes = box_convert(boxes, in_fmt="cxcywh", out_fmt="xyxy")
+            boxes[:, 0::2] *= img_w
+            boxes[:, 1::2] *= img_h
+            boxes = boxes.clamp(min=0)
+
+            results.append({"boxes": boxes, "labels": labels, "scores": scores})
+
+        if was_training:
+            self.train()
+        return results
+
     def _convert_targets(self, targets, images):
         """Convert COCO-format targets to DETR format.
 

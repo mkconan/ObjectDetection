@@ -1,11 +1,12 @@
 from core.data_module import CocoDetectionDataModule
+from core.callbacks import BboxVisualizationCallback
 from models.detr import DETR
 from models.ssd import SSD
 from models.vit_faster_rcnn import ViTFasterRCNN
 
 import torch
 import hydra
-from omegaconf import DictConfig
+from omegaconf import DictConfig, OmegaConf
 from pathlib import Path
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
@@ -70,6 +71,7 @@ def main(config: DictConfig):
     loggers = []
 
     # MLflow logger
+    mlflow_logger = None
     if "mlflow" in config:
         try:
             mlflow_logger = MLFlowLogger(
@@ -116,10 +118,23 @@ def main(config: DictConfig):
     else:
         logger = None
 
+    # Bbox visualization callback (requires MLflow)
+    callbacks = [checkpoint_callback]
+    if mlflow_logger is not None and OmegaConf.select(config, "mlflow.visualization") is not None:
+        vis_config = config.mlflow.visualization
+        num_images = vis_config.get("num_images", 4)
+        score_threshold = vis_config.get("score_threshold", 0.5)
+        bbox_viz_callback = BboxVisualizationCallback(
+            num_images=num_images,
+            score_threshold=score_threshold,
+        )
+        callbacks.append(bbox_viz_callback)
+        print(f"✓ Bbox visualization enabled (num_images={num_images}, threshold={score_threshold})")
+
     trainer = Trainer(
         max_epochs=config.learning.epochs,
         accelerator=device,
-        callbacks=[checkpoint_callback],
+        callbacks=callbacks,
         logger=logger,
         enable_progress_bar=True,
         log_every_n_steps=10,

@@ -145,6 +145,38 @@ class SSD(ModelStrategy):
         else:
             return torch.optim.Adam(self.parameters(), lr=learning_rate)
 
+    @torch.no_grad()
+    def predict_boxes(self, images, score_threshold=0.5):
+        """Run inference and return filtered detections.
+
+        Args:
+            images: List of image tensors (on device).
+            score_threshold: Minimum confidence to keep a detection.
+
+        Returns:
+            List of dicts, each with:
+                - 'boxes': (N, 4) tensor in xyxy pixel coordinates
+                - 'labels': (N,) tensor of class indices
+                - 'scores': (N,) tensor of confidence scores
+        """
+        was_training = self.model.training
+        self.model.eval()
+
+        detections = self.model(images)
+
+        results = []
+        for det in detections:
+            keep = det["scores"] > score_threshold
+            results.append({
+                "boxes": det["boxes"][keep],
+                "labels": det["labels"][keep],
+                "scores": det["scores"][keep],
+            })
+
+        if was_training:
+            self.model.train()
+        return results
+
     def _convert_targets(self, targets):
         """Convert targets from COCO format to SSD format.
 

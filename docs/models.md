@@ -25,6 +25,19 @@ src/models/
 | `training_step()` | 学習ステップ（損失の計算・ログ） |
 | `validation_step()` | 検証ステップ |
 | `configure_optimizers()` | オプティマイザーの設定 |
+| `predict_boxes(images, score_threshold)` | **推論専用メソッド**（eval モードで実行し、スコアフィルタ済みの bbox を返す） |
+
+### `predict_boxes()` の戻り値
+
+`List[Dict]` 形式で、各要素は以下のキーを持ちます。
+
+| キー | 型 | 説明 |
+|---|---|---|
+| `boxes` | `Tensor (N, 4)` | xyxy ピクセル座標の予測 bbox |
+| `labels` | `Tensor (N,)` | クラスインデックス |
+| `scores` | `Tensor (N,)` | 信頼度スコア |
+
+このメソッドは `BboxVisualizationCallback` から呼び出されます。
 
 ## SSD
 
@@ -127,3 +140,4 @@ uv run src/engine.py model=detr learning.epochs=50 optimizer.learning_rate=0.000
 1. `src/models/your_model.py` を作成し `ModelStrategy` を継承
 2. `conf/model/your_model.yaml` を作成し `name: your_model` を設定
 3. `src/engine.py` のモデル選択ブロックに `elif model_name == "your_model":` を追加
+4. `predict_boxes(images, score_threshold=0.5)` を実装して可視化コールバックに対応させる

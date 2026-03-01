@@ -10,6 +10,7 @@ COCO フォーマットのデータセットを使い、複数の検出モデル
 - **COCO データセット** — 標準フォーマット対応
 - **複数モデル対応** — SSD, ViT + Faster R-CNN, DETR を実装済み（今後拡張可能）
 - **ロギング** — MLflow / TensorBoard / CSV に対応
+- **Bbox 可視化** — エポック終了時に GT / 予測 bbox を重畳した画像を MLflow Artifacts に自動保存
 
 ## 現在の実装状況
 
@@ -21,6 +22,7 @@ COCO フォーマットのデータセットを使い、複数の検出モデル
 | SSD | `src/models/ssd.py` | ✅ 実装済み |
 | ViT + Faster R-CNN | `src/models/vit_faster_rcnn.py` | ✅ 実装済み |
 | DETR | `src/models/detr.py` | ✅ 実装済み |
+| Bbox 可視化コールバック | `src/core/callbacks.py` | ✅ 実装済み |
 
 ## クイックスタート
 

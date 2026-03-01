@@ -22,3 +22,6 @@ mlflow:
   experiment_name: "ssd_detection"
   tracking_uri: null  # If null, uses ./mlruns directory. To use tracking server, set to "http://localhost:5000" (requires running 'mlflow ui --port 5000' first)
   run_name: null  # If null, auto-generated
+  visualization:
+    num_images: 4
+    score_threshold: 0.5
